@@ -1,0 +1,25 @@
+
+				
+<!-- start: Main Menu -->
+<div id="sidebar-left" class="span2">
+	<div class="nav-collapse sidebar-nav">
+		<ul class="nav nav-tabs nav-stacked main-menu">
+			<li><!--<a href="/dashboard">--><a href="#"><i class="icon-bar-chart"></i><span class="hidden-tablet"> Dashboard</span></a></li>	
+			<% if(is_business_admin==1){ %>
+			  <li><a href="/business/edit"><i class="icon-edit" style="width:16px;margin-left:3px"></i><span class="hidden-tablet"> Edit Business Info</span></a></li>
+			  <li><a href="/members"><i class="halflings-icon white user" style="width:16px;margin-left:3px"></i><span class="hidden-tablet"> My Members</span></a></li>
+			<% }else{ %>
+			<% } %>
+			
+			<li><a href="/editprofile"><i class="icon-edit" style="width:16px;margin-left:3px"></i><span class="hidden-tablet"> Edit Profile</span></a></li>
+			<li><a href="/changepassword"><i class="icon-edit" style="width:16px;margin-left:3px"></i><span class="hidden-tablet"> Change Password</span></a></li>
+			<li><a href="/yabs/post"><i class="icon-envelope"></i><span class="hidden-tablet"> Post Yab</span></a></li>
+			<li><a href="/yabs/myyabs"><i class="icon-envelope"></i><span class="hidden-tablet"> My Yabs</span></a></li>	
+			<li><a href="/yabs/list"><i class="icon-envelope"></i><span class="hidden-tablet"> Yabs</span></a></li>
+			<li><a href="/logout"><i class="icon-lock"></i><span class="hidden-tablet"> Logout</span></a></li>
+		</ul>
+	</div>
+</div>
+<!-- end: Main Menu -->
+			
+			

@@ -1,0 +1,464 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	
+	<!-- start: Meta -->
+	<meta charset="utf-8">
+	<title>Yabble | Post Yab</title>
+	<meta name="description" content="Yabble">
+	<meta name="author" content="Yabble">
+	<meta name="keyword" content="Yabble">
+	<!-- end: Meta -->
+	
+	<!-- start: Mobile Specific -->
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<!-- end: Mobile Specific -->
+	
+	<!-- start: CSS -->
+	<link id="bootstrap-style" href="../css/bootstrap.min.css" rel="stylesheet">
+	<link href="../css/bootstrap-responsive.min.css" rel="stylesheet">
+	<link id="base-style" href="../css/style.css" rel="stylesheet">
+	<link id="base-style-responsive" href="../css/style-responsive.css" rel="stylesheet">
+	<link href='http://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800&subset=latin,cyrillic-ext,latin-ext' rel='stylesheet' type='text/css'>
+	<link id="bootstrap-style" href="../css/notifyBar.css" rel="stylesheet">
+	<!-- end: CSS -->
+	
+
+	<!-- The HTML5 shim, for IE6-8 support of HTML5 elements -->
+	<!--[if lt IE 9]>
+	  	<script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+		<link id="ie-style" href="css/ie.css" rel="stylesheet">
+	<![endif]-->
+	
+	<!--[if IE 9]>
+		<link id="ie9style" href="css/ie9.css" rel="stylesheet">
+	<![endif]-->
+		
+	<!-- start: Favicon -->
+	<link rel="shortcut icon" href="../img/favicon.ico">
+	<!-- end: Favicon -->
+	
+</head>
+
+<body>
+	<!-- start: Header -->
+	  <% include includes/header.html %>
+	<!-- end: Header -->
+	
+		<div class="container-fluid-full">
+		<div class="row-fluid">
+				
+			<!-- start: Main Menu -->
+			<% include includes/left-menu.html %>
+			<!-- end: Main Menu -->
+			
+			<noscript>
+				<div class="alert alert-block span10">
+					<h4 class="alert-heading">Warning!</h4>
+					<p>You need to have <a href="http://en.wikipedia.org/wiki/JavaScript" target="_blank">JavaScript</a> enabled to use this site.</p>
+				</div>
+			</noscript>
+			
+			
+			
+			<!-- start: Content -->
+			<div id="content" class="span10">
+			
+			
+			<ul class="breadcrumb">
+				<li>
+					<i class="icon-home"></i>
+					<a href="dashboard.php">Home</a> 
+					<i class="icon-angle-right"></i>
+				</li>
+				<li>Post Yab</li>
+			</ul>
+			
+			<div class="row-fluid">
+				<div class="box">
+					<div class="box-header">
+						<h2><i class="halflings-icon white list-alt"></i><span class="break"></span>Yab Left</h2>
+						<div class="box-icon">
+						
+						</div>
+					</div>
+					<div class="box-content">
+						Yab left this week: <%=yabperweekleft%>.&nbsp;&nbsp;&nbsp;Yab left this month: <%=yabpermonthleft%>.&nbsp;&nbsp;&nbsp;Yab left this year: <%=yabperyearleft%>.	
+					</div>
+				</div>
+			</div><!--/row-->
+
+			
+			<div class="row-fluid sortable">
+				<div class="box span12">
+					<div class="box-header" data-original-title>
+						<h2><i class="halflings-icon white edit"></i><span class="break"></span>Post Yab</h2>
+					</div>
+					<div class="box-content">
+						<form class="form-horizontal" action="/api/yab/webpostyab" method="post" enctype="multipart/form-data">
+						  <fieldset>
+						        <% if(is_send_all==1){ %>
+						        <div class="control-group">
+							  <label class="control-label" for="date01">Yab For</label>
+							  <div class="controls">
+								<input type="radio" name="optionsyabfor" id="alluser" value="A" style="margin-left:0px" checked> All Users &nbsp;&nbsp;&nbsp;&nbsp; <input type="radio" name="optionsyabfor" id="useraround" value="UA" style="margin-left:0px"> Users around me 
+							   </div>
+							 </div>
+						        <% } %>
+							<div class="control-group">
+							  <label class="control-label" for="date01">Message</label>
+							  <div class="controls">
+							        <input type="hidden" class="input-xlarge" name="userid" id="userid" value="<%=userid%>">
+							       
+								<textarea id="message" name="message" rows="5" style="width:350px" placeholder="200 characters max" maxlength="200"></textarea>
+								<span id="message_err"></span>
+								
+							  </div>
+							</div>
+							<div class="control-group">
+							  <label class="control-label" for="date01">Image</label>
+							  <div class="controls">
+								<input type="file" name="profile_picture" id="profile_picture">
+								<input type="hidden" name="imagewidth" id="imagewidth">
+								<input type="hidden" name="imageheight" id="imageheight">
+								<span id="profile_picture_err"></span>  
+							  </div>
+							</div>
+							 <div class="control-group">
+							  <label class="control-label" for="date01">Target Group</label>
+							  <div class="controls">
+								<input type="radio" name="optionsRadios" id="male" value="M" style="margin-left:0px"> Male &nbsp;&nbsp;&nbsp;&nbsp; <input type="radio" name="optionsRadios" id="female" value="F" style="margin-left:0px"> Female &nbsp;&nbsp;&nbsp;&nbsp; <input type="radio" name="optionsRadios" id="all" value="E" style="margin-left:0px" checked> Everybody
+							  </div>
+							</div>
+							<div class="control-group">
+								<label class="control-label" for="selectError3">Yabreach</label>
+								<div class="controls">
+								  <input type="hidden" class="input-xlarge" id="broadcasting_radius" name="broadcasting_radius" value="">
+								  <div id="slider-range-min"></div><div id="show_value"></div>
+								  <span id="broadcasting_err"></span>
+								</div>
+							</div>
+							<div class="control-group">
+								<label class="control-label" for="selectError3">Min. Age</label>
+								<div class="controls">
+								  <select id="min_age"  name="min_age">
+								        <option value="">Select Min Age</option>
+								        <% for(r=16;r<=60;r=r+1){ %>
+									 <option value="<%=r%>" <% if(r==16){ %>selected<% } %>><%=r%> years</option>
+								        <% } %>
+								  </select>
+								  <span id="min_age_err"></span>
+								</div>
+							</div>
+							<div class="control-group">
+								<label class="control-label" for="selectError3">Max. Age</label>
+								<div class="controls">
+								  <select id="max_age"  name="max_age">
+								        <option value="">Select Max Age</option>
+								        <% for(r=16;r<=60;r=r+1){ %>
+									 <option value="<%=r%>" <% if(r==60){ %>selected<% } %>><%=r%> years</option>
+								        <% } %>
+								  </select>
+								  <span id="max_age_err"></span>
+								</div>
+							</div>
+							<div class="control-group">
+							  <label class="control-label" for="date01">Expiration Date</label>
+							  <div class="controls">
+								<input type="checkbox" name="exp_radio" id="exp_radio" value="2" style="margin-left:0px" onclick="check_exp_date('E')">
+							  </div>
+							</div>
+							<div class="control-group" id="exp_date_text" style="display:none">
+							  <label class="control-label" for="date01">&nbsp;</label>
+							  <div class="controls">
+								<input type="text" class="input-xlarge" id="exp" name="exp" value="" autocomplete="off" readonly>
+								<span id="exp_err"></span>
+							  </div>
+							</div>
+							<% if(is_push==1){ %>
+						          <div class="control-group">
+							  <label class="control-label" for="date01">Push Notification</label>
+							  <div class="controls">
+								<input type="checkbox" name="push_noti" id="push_noti" value="2" style="margin-left:0px">
+							  </div>
+							</div>
+                                                       <% } %>
+							<div class="form-actions">
+							  <input type="submit" class="btn btn-primary" name="addbutton" value="Post" onclick="return validate()">
+							  <button type="reset" class="btn">Cancel</button>
+							</div>
+						  </fieldset>
+						</form>   
+					</div>
+				</div><!--/span-->
+			</div><!--/row-->
+	</div><!--/.fluid-container-->
+	
+	<!-- end: Content -->
+	</div><!--/#content.span10-->
+	</div><!--/fluid-row-->
+		
+	<div class="modal hide fade" id="myModal">
+		<div class="modal-header">
+			<button type="button" class="close" data-dismiss="modal">×</button>
+			<h3>Settings</h3>
+		</div>
+		<div class="modal-body">
+			<p>Here settings can be configured...</p>
+		</div>
+		<div class="modal-footer">
+			<a href="#" class="btn" data-dismiss="modal">Close</a>
+			<a href="#" class="btn btn-primary">Save changes</a>
+		</div>
+	</div>
+	
+	<div class="clearfix"></div>
+	
+	<footer>
+		<p>
+			<span style="text-align:left;float:left">&copy; 2014 Yabble</span>			
+		</p>
+	</footer>
+	
+	<!-- start: JavaScript-->
+
+		<script src="../js/jquery-1.9.1.min.js"></script>
+		
+	        <script src="../js/jquery-migrate-1.0.0.min.js"></script>
+	
+		<script src="../js/jquery-ui-1.10.0.custom.min.js"></script>
+	
+		<script src="../js/jquery.ui.touch-punch.js"></script>
+	
+		<script src="../js/modernizr.js"></script>
+	
+		<script src="../js/bootstrap.min.js"></script>
+	
+		<script src="../js/jquery.cookie.js"></script>
+	
+		<script src='../js/fullcalendar.min.js'></script>
+	
+		<script src='../js/jquery.dataTables.min.js'></script>
+
+		<script src="../js/excanvas.js"></script>
+		
+	        <script src="../js/jquery.flot.js"></script>
+	        
+	        <script src="../js/jquery.flot.pie.js"></script>
+	        
+	        <script src="../js/jquery.flot.stack.js"></script>
+	        
+	        <script src="../js/jquery.flot.resize.min.js"></script>
+	
+		<script src="../js/jquery.chosen.min.js"></script>
+	
+		<script src="../js/jquery.uniform.min.js"></script>
+		
+		<script src="../js/jquery.cleditor.min.js"></script>
+	
+		<script src="../js/jquery.noty.js"></script>
+	
+		<script src="../js/jquery.elfinder.min.js"></script>
+	
+		<script src="../js/jquery.raty.min.js"></script>
+	
+		<script src="../js/jquery.iphone.toggle.js"></script>
+	
+		<script src="../js/jquery.uploadify-3.1.min.js"></script>
+	
+		<script src="../js/jquery.gritter.min.js"></script>
+	
+		<script src="../js/jquery.imagesloaded.js"></script>
+	
+		<script src="../js/jquery.masonry.min.js"></script>
+	
+		<script src="../js/jquery.knob.modified.js"></script>
+	
+		<script src="../js/jquery.sparkline.min.js"></script>
+	
+		<script src="../js/counter.js"></script>
+	
+		<script src="../js/retina.js"></script>
+
+		<script src="../js/custom.js"></script>
+		
+		<script src="../js/jquery.notifyBar.js"></script>
+		
+		<style>
+		 #slider-range-min{float:left;width:284px;margin-top:9px}
+		 #show_value{float:left;width:100px;color:#333;margin-left:10px;margin-top:6px} 
+		 .radio{padding-left:0px !important;}
+		</style>
+		
+		<script>
+		$('#push_noti').change(function () {
+                    if ($(this).is(':checked')) {
+                        $(this).val('1');
+                    };
+                    if ($(this).is(':checked') == false) {
+                        $(this).val('2');
+                    };
+                });
+                $('#exp_radio').change(function () {
+                    if ($(this).is(':checked')) {
+                        $(this).val('1');
+                    };
+                    if ($(this).is(':checked') == false) {
+                        $(this).val('2');
+                    };
+                });
+                
+		var dateToday = new Date();
+                 $( "#exp" ).datepicker({ 
+                    dateFormat: 'yy-mm-dd',
+                    changeMonth: true,
+                    changeYear: true,
+                    minDate: dateToday,
+                    yearRange: "-0:+50"
+                 });
+
+                  $(function() {
+                    $( "#slider-range-min" ).slider({
+                      range: "min",
+                      value: 40,
+                      min: 30,
+                      max: 100,
+                      slide: function( event, ui ) {
+                        $( "#broadcasting_radius" ).val( ui.value );
+                        $( "#show_value" ).html( ui.value + ' Miles' );
+                      }
+                    });
+                    $( "#broadcasting_radius" ).val( $( "#slider-range-min" ).slider( "value" ) );
+                    $( "#show_value" ).html( $( "#slider-range-min" ).slider( "value" ) + ' Miles' );
+                  });
+                </script>
+		<script>
+		 $(document).ready(function(){ 
+                         $("#profile_picture").change(function(){  
+                           var ext =  $('#profile_picture').val().split('.').pop().toLowerCase();
+                             if($.inArray(ext, ['png','jpg','jpeg','gif']) == -1) {
+                                  $('#profile_picture').val('');	
+                                  $('.filename').html('No file selected');
+                                  $('#profile_picture_err').html('<font color="red">Please upload .png, .jpg, .jpeg, .gif file format</font>');
+                             }
+                             else
+                             {
+                               var reader = new FileReader();
+                               var image  = new Image();
+                               reader.readAsDataURL(this.files[0]);  
+                               reader.onload = function(_file) {
+                                image.src    = _file.target.result; 
+                                image.onload = function() {
+                                    var w = this.width,
+                                        h = this.height;
+                                  $('#imagewidth').val(w);
+                                  $('#imageheight').val(h);
+                                };
+                              };
+                              $('#profile_picture_err').html('');
+                             }
+                         });                         
+                });
+                
+                function check_exp_date(val)
+                {
+                  if($('#exp_radio').is(':checked'))
+                  { 
+                    $('#exp_date_text').show();
+                  }
+                  else
+                  {
+                    $('#exp_date_text').hide();
+                    $('#exp_err').html('');
+                    $('#exp').val('');
+                  }
+                }
+                
+		function validate()
+		{
+		    var message=$('#message').val();
+		    var profile_picture=$('#profile_picture').val();
+	            var broadcasting_radius=$('#broadcasting_radius').val();
+	            var min_age=$('#min_age').val();
+	            var max_age=$('#max_age').val();
+	            
+	            if(message=='' && profile_picture=='')
+	            {
+	              $('#message_err').html('<font color="red">Please enter your message or image</font>');
+	            }
+	            else
+	            {
+	              $('#message_err').html('');
+	            }
+	            if(broadcasting_radius=='')
+	            {
+	              $('#broadcasting_err').html('<font color="red">Please select broadcasting radius</font>');
+	            }
+	            else
+	            {
+	              $('#broadcasting_err').html('');
+	            }
+	            if(min_age=='')
+	            {
+	              $('#min_age_err').html('<font color="red">Please enter minimum age</font>');
+	            }
+	            else
+	            {
+	              $('#min_age_err').html('');
+	            }
+	            if(max_age=='')
+	            {
+	              $('#max_age_err').html('<font color="red">Please enter maximum age</font>');
+	            }
+	            else
+	            {
+	              $('#max_age_err').html('');
+	            }
+	            
+	            if((message!='' ||  profile_picture!='') && broadcasting_radius!='' && min_age!='' && max_age!='')
+	            {
+	              if(parseInt(min_age) > parseInt(max_age)) {
+                        $('#max_age_err').html("<font color='#ff0000'>Min age should be less than Max age</font>");
+                        return false;
+                      }
+                      else
+                      {
+                           $retdate=1;
+                          
+                          if($('#exp_radio').is(':checked'))
+                          { 
+                            if($('#exp').val()=='')
+	                    {
+	                      $('#exp_err').html('<font color="red">Please select experation date</font>');
+	                      $retdate=0;
+	                    }
+	                    else
+	                    {
+	                      $('#exp_err').html('');
+	                      $retdate=1;
+	                    }
+                          }
+                          else
+                          {
+                            $retdate=1;
+                          }
+                          if($retdate==1)
+                          {
+                            return true;
+                          }
+                          else
+                          {
+                            return false;
+                          }
+                      }
+	            }
+	            else
+	            {
+	              return false;
+	            }
+		}
+	  </script>
+	<!-- end: JavaScript-->
+	
+</body>
+</html>

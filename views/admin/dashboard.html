@@ -1,0 +1,637 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	
+	<!-- start: Meta -->
+	<meta charset="utf-8">
+	<title>Yabble | Dashboard</title>
+	<meta name="description" content="Yabble">
+	<meta name="author" content="Yabble">
+	<meta name="keyword" content="Yabble">
+	<!-- end: Meta -->
+	
+	<!-- start: Mobile Specific -->
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<!-- end: Mobile Specific -->
+	
+	<!-- start: CSS -->
+	<link id="bootstrap-style" href="../../css/bootstrap.min.css" rel="stylesheet">
+	<link href="../../css/bootstrap-responsive.min.css" rel="stylesheet">
+	<link id="base-style" href="../../css/style.css" rel="stylesheet">
+	<link id="base-style-responsive" href="../../css/style-responsive.css" rel="stylesheet">
+	<link href='http://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800&subset=latin,cyrillic-ext,latin-ext' rel='stylesheet' type='text/css'>
+	<link id="bootstrap-style" href="../../css/notifyBar.css" rel="stylesheet">
+	<!-- end: CSS -->
+	
+
+	<!-- The HTML5 shim, for IE6-8 support of HTML5 elements -->
+	<!--[if lt IE 9]>
+	  	<script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+		<link id="ie-style" href="css/ie.css" rel="stylesheet">
+	<![endif]-->
+	
+	<!--[if IE 9]>
+		<link id="ie9style" href="css/ie9.css" rel="stylesheet">
+	<![endif]-->
+		
+	<!-- start: Favicon -->
+	<link rel="shortcut icon" href="../../img/favicon.ico">
+	<!-- end: Favicon -->
+	
+</head>
+
+<body>
+		<!-- start: Header -->
+             <% include includes/header.html %>
+	<!-- start: Header -->
+	
+		<div class="container-fluid-full">
+		<div class="row-fluid">
+				
+			<!-- start: Main Menu -->
+			<% include includes/left-menu.html %>
+			<!-- end: Main Menu -->
+			
+			<noscript>
+				<div class="alert alert-block span10">
+					<h4 class="alert-heading">Warning!</h4>
+					<p>You need to have <a href="http://en.wikipedia.org/wiki/JavaScript" target="_blank">JavaScript</a> enabled to use this site.</p>
+				</div>
+			</noscript>
+			
+			<!-- start: Content -->
+			<div id="content" class="span10">
+			
+			
+			<ul class="breadcrumb">
+				<li>
+					<i class="icon-home"></i>
+					<a href="dashboard.php">Home</a> 
+					<i class="icon-angle-right"></i>
+				</li>
+				<li>Dashboard</li>
+			</ul>
+			<div class="row-fluid">	
+				<div class="box blue span12">
+					<div class="box-header">
+						<h2><i class="halflings-icon white list-alt"></i><span class="break"></span>Users Around You</h2>
+						<div class="box-icon" style="margin-top:-8px">
+						Filter by distance:
+						 <select id="selectError3" onchange="refresh(this.value)">
+							<option value="5" <?php if(isset($_GET['dis']) && $_GET['dis']==5){echo 'selected';}?>>5 Miles</option>
+							<option value="10" <?php if(isset($_GET['dis']) && $_GET['dis']==10){echo 'selected';}?>>10 Miles</option>
+							<option value="15" <?php if(isset($_GET['dis']) && $_GET['dis']==15){echo 'selected';}?>>15 Miles</option>
+							<option value="20" <?php if(isset($_GET['dis']) && $_GET['dis']==20){echo 'selected';}?>>20 Miles</option>
+							<option value="25" <?php if(isset($_GET['dis']) && $_GET['dis']==25){echo 'selected';}?>>25 Miles</option>
+							<option value="30" <?php if(isset($_GET['dis']) && $_GET['dis']==30){echo 'selected';}?>>30 Miles</option>
+							<option value="35" <?php if(isset($_GET['dis']) && $_GET['dis']==35){echo 'selected';}?>>35 Miles</option>
+							<option value="40" <?php if(isset($_GET['dis']) && $_GET['dis']==40){echo 'selected';}?>>40 Miles</option>
+							<option value="45" <?php if(isset($_GET['dis']) && $_GET['dis']==45){echo 'selected';}?>>45 Miles</option>
+							<option value="50" <?php if(isset($_GET['dis']) && $_GET['dis']==50){echo 'selected';}?>>50 Miles</option>
+							<option value="60" <?php if(isset($_GET['dis']) && $_GET['dis']==60){echo 'selected';}?>>60 Miles</option>
+							<option value="70" <?php if(isset($_GET['dis']) && $_GET['dis']==70){echo 'selected';}?>>70 Miles</option>
+							<option value="80" <?php if(isset($_GET['dis']) && $_GET['dis']==80){echo 'selected';}?>>80 Miles</option>
+							<option value="90" <?php if(isset($_GET['dis']) && $_GET['dis']==90){echo 'selected';}?>>90 Miles</option>
+							<option value="100" <?php if(isset($_GET['dis']) && $_GET['dis']==100){echo 'selected';}?>>100 Miles</option>
+						 </select>
+						 &nbsp;&nbsp;Auto Refresh <input type="checkbox" name="auto-refresh" id="auto-refresh" <?php if(isset($_GET['ar']) && $_GET['ar']==1){echo 'checked';}?>>
+						</div>
+					</div>
+					<div class="box-content">
+						<?php
+						  $infodiv='infodiv';
+						  function distance($lat1, $lng1, $lat2, $lng2, $miles = true)
+                                                  {
+                                                                $pi80 = M_PI / 180;
+                                                                $lat1 *= $pi80;
+                                                                $lng1 *= $pi80;
+                                                                $lat2 *= $pi80;
+                                                                $lng2 *= $pi80;
+                                                         
+                                                                $r = 6372.797;
+                                                                $dlat = $lat2 - $lat1;
+                                                                $dlng = $lng2 - $lng1;
+                                                                $a = sin($dlat / 2) * sin($dlat / 2) + cos($lat1) * cos($lat2) * sin($dlng / 2) * sin($dlng / 2);
+                                                                $c = 2 * atan2(sqrt($a), sqrt(1 - $a));
+                                                                $km = $r * $c;
+                                                         
+                                                                return ($miles ? ($km * 0.621371192) : $km);
+                                                   }
+                                                   
+                                                  function getage($dob) 
+                                                  { 
+                                                        $dob=explode("-",$dob); 
+                                                        $curMonth = date("m");
+                                                        $curDay = date("j");
+                                                        $curYear = date("Y");
+                                                        $age = $curYear - $dob[0]; 
+                                                        if($curMonth<$dob[1] || ($curMonth==$dob[1] && $curDay<$dob[2])) 
+                                                                $age--; 
+                                                        return $age; 
+                                                  }
+						
+						  $admin = $db->admin;
+						  $qryadmn = array("_id" => new MongoId($_SESSION['UID']));
+						  $resadmin=$admin->findOne($qryadmn);
+						  $latitude=$resadmin['latitude'];
+						  $longitude=$resadmin['longitude'];
+						  if(isset($_GET['dis']) && $_GET['dis']!='')
+						  {
+						    $reqdis=$_GET['dis'];
+						  }
+						  else
+						  {
+						    $reqdis=5;
+						  }
+						  
+						  $qryuser = array("is_logged_in" => 1,"is_active"=>1);
+					          $user_app = $db->member_app;
+					          $users=$user_app->find($qryuser);
+					          $final_usr=array();
+					          $result_user_count=0;
+					          $skill_arr='';
+                                                  $i=1;
+					          foreach($users as $user)
+					          {
+
+					            $lat=$user['latitude'];
+                                                    $long=$user['longitude'];
+                                                    
+
+                                                    $dis=distance($lat, $long, $latitude, $longitude,true);
+                                                   
+                                                    if($dis <= $reqdis)
+                                                    {
+                                                       $final_usr[]=$user;
+                                                       $result_user_count++;
+                                                       
+                                                       $dobusr=$user['dob'];
+			                               $ageuser=getage($dobusr);
+			                               $genderusr=(isset($user['gender']) && $user['gender']=='M')?'Male':'Female' ;
+                                                       
+                                                       $skill_arr.="['".$user['username']."', ". $user['latitude'].", ".$user['longitude'].", ".$i."],";
+                                                       $skill_data_arr.="['<div class=".$infodiv."><p><b>Gender:</b> ".$genderusr."</p><p><b>Age:</b> ".$ageuser." Years</p></div>'],";
+                                                       $i++;
+                                                    }
+					          }
+					          
+					          $qrymale = array("gender" => 'M',"is_logged_in" => 1,"is_active"=>1);
+			                          $males=$user_app->find($qrymale);
+			                          $final_male_usr=array();
+					          $result_male_user_count=0;
+					          foreach($males as $male)
+					          {
+					            $lat=$male['latitude'];
+                                                    $long=$male['longitude'];
+                                                                        
+                                                    $dis=distance($lat, $long, $latitude, $longitude,true);
+                                                    if($dis <= $reqdis)
+                                                    {
+                                                       $final_male_usr[]=$male;
+                                                       $result_male_user_count++;
+                                                    }
+					          }
+			                          
+			                          $qryfemale = array("gender" => 'F',"is_logged_in" => 1,"is_active"=>1);
+			                          $females=$user_app->find($qryfemale);
+			                          $final_female_usr=array();
+					          $result_female_user_count=0;
+					          foreach($females as $female)
+					          {
+					            $lat=$female['latitude'];
+                                                    $long=$female['longitude'];
+                                                                        
+                                                    $dis=distance($lat, $long, $latitude, $longitude,true);
+                                                    if($dis <= $reqdis)
+                                                    {
+                                                       $final_female_usr[]=$female;
+                                                       $result_female_user_count++;
+                                                    }
+					          }
+					        ?>
+						<a class="quick-button span4">
+							<i class="icon-group"></i>
+							<p>Total Users</p>
+							<span class="notification blue"><?php echo $result_user_count;?></span>
+						</a>
+						<a class="quick-button span4">
+							<i class="icon-group"></i>
+							<p>Males</p>
+							<span class="notification blue"><?php echo $result_male_user_count;?></span>
+						</a>
+						<a class="quick-button span4">
+							<i class="icon-group"></i>
+							<p>Females</p>
+							<span class="notification blue"><?php echo $result_female_user_count;?></span>
+						</a>
+						<div class="clearfix"></div>
+						<div id="googleMap" style="width:100%;height:250px;margin-right:0px;float:none"></div>
+
+						<div class="clearfix"></div>
+						<?php
+						 
+                                                  $useragearray=array();
+                                                  $maleagearray=array();
+                                                  $femaleagearray=array();
+                                                  
+                                                  $allmaleusers_count=0;
+                                                  $allfemaleusers_count=0;
+                                                  $allusers_count=0;
+                                                  
+			                             foreach($final_usr as $alluser)
+			                             {
+			                               if(isset($alluser['dob']) && $alluser['dob']!='')
+			                               {
+			                                $dob=$alluser['dob'];
+			                                $age=getage($dob);
+			                                $useragearray[]=$age;
+			                                $allusers_count++;
+			                               }
+			                             }
+			                             $counts = array_count_values($useragearray);
+			                             $pie1='';
+			                             if(!empty($counts)){
+			                              $pie1.="['Age', 'No of Users'],";
+			                             foreach($counts as $k=>$v)
+			                             {
+			                               
+			                               $pie1.="['".$k." Years', ".$v."],";
+                                                  
+			                             }
+			                             }
+			                             
+			                             foreach($final_male_usr as $allmaleuser)
+			                             {
+			                               if(isset($allmaleuser['dob']) && $allmaleuser['dob']!='')
+			                               {
+			                                $dob=$allmaleuser['dob'];
+			                                $age=getage($dob);
+			                                $maleagearray[]=$age;
+			                                $allmaleusers_count++;
+			                               }
+			                             }
+			                             $counts = array_count_values($maleagearray);
+			                             $pie2='';
+			                             if(!empty($counts)){
+			                              $pie2.="['Age', 'No of Users'],";
+			                             foreach($counts as $k=>$v)
+			                             {
+			                               $pie2.="['".$k." Years', ".$v."],";
+			                             }
+			                             }
+			                             
+			                             foreach($final_female_usr as $allfemaleuser)
+			                             {
+			                               if(isset($allfemaleuser['dob']) && $allfemaleuser['dob']!='')
+			                               {
+			                                $dob=$allfemaleuser['dob'];
+			                                $age=getage($dob);
+			                                $femaleagearray[]=$age;
+			                                $allfemaleusers_count++;
+			                               }
+			                             }
+			                             $counts = array_count_values($femaleagearray);
+			                             $pie3='';
+			                             if(!empty($counts)){
+			                               $pie3.="['Age', 'No of Users'],";
+			                             foreach($counts as $k=>$v)
+			                             {
+			                               $pie3.="['".$k." Years', ".$v."],";
+			                             }
+			                             }
+			                             
+			                             if($allusers_count>0){
+						?>
+						<div style="float:left;width:100%">
+						 <div style="float:left;width:100%;color:#000;margin-top:30px;text-align:center;font-size:25px;margin-bottom:20px">
+						  Age of Users
+						 </div>
+						 <div class="clearfix"></div>
+						<?php if($allusers_count>0){ ?>
+						<div class="span4">
+						        <div id="canvas-holder">
+                                                                <div id="piechart" style="width: 350px; height: 300px"></div>
+                                                        </div>
+						 </div>
+						 <?php } ?>
+						 <?php if($allmaleusers_count>0){ ?>
+						 <div class="span3">
+						        <div id="canvas-holder">
+                                                                <div id="piechartmale" style="width:350px; height: 300px;"></div>
+                                                        </div>
+						 </div>
+						 <?php } ?>
+						 <?php if($allfemaleusers_count>0){ ?>
+						 <div class="span3">
+						        <div id="piechartfemale" style="width: 350px; height: 300px;"></div>
+						 </div>
+						 <?php } ?>
+
+                                                 </div>
+                                               <?php } ?>
+                                                <div class="clearfix"></div>
+					</div>	
+				</div><!--/span-->
+			</div><!--/row-->
+
+	        </div><!--/.fluid-container-->
+	        <!-- end: Content -->
+		</div><!--/#content.span10-->
+		</div><!--/fluid-row-->
+		
+	<div class="modal hide fade" id="myModal">
+		<div class="modal-header">
+			<button type="button" class="close" data-dismiss="modal">×</button>
+			<h3>Settings</h3>
+		</div>
+		<div class="modal-body">
+			<p>Here settings can be configured...</p>
+		</div>
+		<div class="modal-footer">
+			<a href="#" class="btn" data-dismiss="modal">Close</a>
+			<a href="#" class="btn btn-primary">Save changes</a>
+		</div>
+	</div>
+	
+	<div class="clearfix"></div>
+	
+	<footer>
+
+		<p>
+			<span style="text-align:left;float:left">&copy; 2014 Yabble</span>
+			
+		</p>
+
+	</footer>
+	
+	<!-- start: JavaScript-->
+
+		<script src="../../js/jquery-1.9.1.min.js"></script>
+		
+	        <script src="../../js/jquery-migrate-1.0.0.min.js"></script>
+	
+		<script src="../../js/jquery-ui-1.10.0.custom.min.js"></script>
+	
+		<script src="../../js/jquery.ui.touch-punch.js"></script>
+	
+		<script src="../../js/modernizr.js"></script>
+	
+		<script src="../../js/bootstrap.min.js"></script>
+	
+		<script src="../../js/jquery.cookie.js"></script>
+	
+		<script src='../../js/fullcalendar.min.js'></script>
+	
+		<script src='../../js/jquery.dataTables.min.js'></script>
+
+		<script src="../../js/excanvas.js"></script>
+		
+	        <script src="../../js/jquery.flot.js"></script>
+	        
+	        <script src="../../js/jquery.flot.pie.js"></script>
+	        
+	        <script src="../../js/jquery.flot.stack.js"></script>
+	        
+	        <script src="../../js/jquery.flot.resize.min.js"></script>
+	
+		<script src="../../js/jquery.chosen.min.js"></script>
+	
+		<script src="../../js/jquery.uniform.min.js"></script>
+		
+		<script src="../../js/jquery.cleditor.min.js"></script>
+	
+		<script src="../../js/jquery.noty.js"></script>
+	
+		<script src="../../js/jquery.elfinder.min.js"></script>
+	
+		<script src="../../js/jquery.raty.min.js"></script>
+	
+		<script src="../../js/jquery.iphone.toggle.js"></script>
+	
+		<script src="../../js/jquery.uploadify-3.1.min.js"></script>
+	
+		<script src="../../js/jquery.gritter.min.js"></script>
+	
+		<script src="../../js/jquery.imagesloaded.js"></script>
+	
+		<script src="../../js/jquery.masonry.min.js"></script>
+	
+		<script src="../../js/jquery.knob.modified.js"></script>
+	
+		<script src="../../js/jquery.sparkline.min.js"></script>
+	
+		<script src="../../js/counter.js"></script>
+	
+		<script src="../../js/retina.js"></script>
+
+		<script src="../../js/custom.js"></script>
+		
+		<script src="../../js/jquery.notifyBar.js"></script>
+		
+		<script src="js/Chart.js"></script>
+		
+		<script type="text/javascript" src="https://www.google.com/jsapi"></script>
+		
+                <script type="text/javascript">
+                      
+                      $(document).ready(function(){
+                        setInterval(function(){ 
+                         if($('#auto-refresh').is(':checked'))
+                         {
+                           //location.reload();
+                           window.location.href="user_around_you.php?ar=1&dis=<?php echo $_GET['dis']?>";
+                         }
+                         else
+                         {
+
+                         }
+                        }, 60000);
+                      });
+                 
+                      google.load("visualization", "1", {packages:["corechart"]});
+                      <?php if($allusers_count>0){ ?>
+                              google.setOnLoadCallback(drawChart);
+                              function drawChart() {
+
+                                var data = google.visualization.arrayToDataTable([
+                                  <?php echo $pie1;?>
+                                ]);
+
+                                var options = {
+                                  title: 'Everybody'
+                                };
+
+                                var chart = new google.visualization.PieChart(document.getElementById('piechart'));
+
+                                chart.draw(data, options);
+                              }
+                      <?php } ?>
+                      <?php if($allmaleusers_count>0){ ?>
+                              google.setOnLoadCallback(drawChartmale);
+                              function drawChartmale() {
+
+                                var data = google.visualization.arrayToDataTable([
+                                  <?php echo $pie2;?>
+                                ]);
+
+                                var options = {
+                                  title: 'Male'
+                                };
+
+                                var chart = new google.visualization.PieChart(document.getElementById('piechartmale'));
+
+                                chart.draw(data, options);
+                              }
+                      <?php } ?>
+                      <?php if($allfemaleusers_count>0){ ?>
+                              google.setOnLoadCallback(drawChartfemale);
+                              function drawChartfemale() {
+
+                                var data = google.visualization.arrayToDataTable([
+                                  <?php echo $pie3;?>
+                                ]);
+
+                                var options = {
+                                  title: 'Female'
+                                };
+
+                                var chart = new google.visualization.PieChart(document.getElementById('piechartfemale'));
+
+                                chart.draw(data, options);
+                              }
+                      <?php } ?>
+                </script>
+                <script>
+                    function refresh(val)
+                    {
+                      window.location.href="user_around_you.php?ar=<?php echo $_GET['ar'];?>&dis="+val;
+                    }
+              </script>
+		<script src="http://maps.googleapis.com/maps/api/js"></script>
+               <script>
+                var beaches = [<?php echo ((isset($skill_arr) && $skill_arr!='')?$skill_arr:'');?>];
+                var map ='';
+                function initialize() {
+                var noPoi = [
+                 {
+                    featureType: "poi",
+                    stylers: [
+                      { visibility: "off" }
+                    ]   
+                  }
+                ];
+                 var mapOptions = {
+                    zoom: 12,
+                    center: new google.maps.LatLng(<?php echo $latitude;?> , <?php echo $longitude;?>),
+	                styles:noPoi,
+	                zoomControl:true
+                 }
+                 map = new google.maps.Map(document.getElementById('googleMap'),
+                                                mapOptions);
+
+                 setMarkers(map, beaches);
+
+                }
+
+                var marker;
+                var markers = new Array();
+                function setMarkers(map, locations) {
+                 var infoWindowContent = [
+                        <?php echo $skill_data_arr;?>
+                    ];
+                  var infoWindow = new google.maps.InfoWindow();
+                  for (var i = 0; i < locations.length; i++) {
+                    var beach = locations[i];
+                    var myLatLng = new google.maps.LatLng(beach[1], beach[2]);
+                    marker = new google.maps.Marker({
+                        position: myLatLng,
+                        map: map,
+                        title: beach[0],
+                        zIndex: beach[3],
+                    });
+	            markers.push(marker);
+
+	            google.maps.event.addListener(marker, 'mouseout', (function(marker, i) {
+	                  return function() {
+	                    infoWindow.close();
+	                  }
+                    })(marker, i));
+
+	            google.maps.event.addListener(marker, 'mouseover', (function(marker, i) {
+                      return function() {
+		                 
+		                  infoWindow.setContent(infoWindowContent[i][0]);
+		                  infoWindow.open(map, marker); 
+                      }
+                    })(marker, i));
+                  }
+               } 
+               google.maps.event.addDomListener(window, 'load', initialize);
+          </script>
+		<style>
+		    .infodiv{color:#000;}
+		    .infodiv p{margin-bottom:1px}
+                    #canvas-holder {
+                        width: auto;
+                        margin-top: 50px;
+                        text-align: center;
+                        float:left;
+                    }
+                    #chartjs-tooltip {
+                        opacity: 1;
+                        position: absolute;
+                        background: rgba(0, 0, 0, .7);
+                        color: white;
+                        padding: 3px;
+                        border-radius: 3px;
+                        -webkit-transition: all .1s ease;
+                        transition: all .1s ease;
+                        pointer-events: none;
+                        -webkit-transform: translate(-50%, 0);
+                        transform: translate(-50%, 0);
+                    }
+                    #chartjs-tooltip.below {
+                        -webkit-transform: translate(-50%, 0);
+                        transform: translate(-50%, 0);
+                    }
+                    #chartjs-tooltip.below:before {
+                        border: solid;
+                        border-color: #111 transparent;
+                        border-color: rgba(0, 0, 0, .8) transparent;
+                        border-width: 0 8px 8px 8px;
+                        bottom: 1em;
+                        content: "";
+                        display: block;
+                        left: 50%;
+                        position: absolute;
+                        z-index: 99;
+                        -webkit-transform: translate(-50%, -100%);
+                        transform: translate(-50%, -100%);
+                    }
+                    #chartjs-tooltip.above {
+                        -webkit-transform: translate(-50%, -100%);
+                        transform: translate(-50%, -100%);
+                    }
+                    #chartjs-tooltip.above:before {
+                        border: solid;
+                        border-color: #111 transparent;
+                        border-color: rgba(0, 0, 0, .8) transparent;
+                        border-width: 8px 8px 0 8px;
+                        bottom: 1em;
+                        content: "";
+                        display: block;
+                        left: 50%;
+                        top: 100%;
+                        position: absolute;
+                        z-index: 99;
+                        -webkit-transform: translate(-50%, 0);
+                        transform: translate(-50%, 0);
+                    }
+                    .gmnoprint img {
+                            max-width: none; 
+                     }
+                </style>
+                
+	<!-- end: JavaScript-->
+</body>
+</html>

@@ -1,0 +1,429 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	
+	<!-- start: Meta -->
+	<meta charset="utf-8">
+	<title>Yabble | Edit Business Profile</title>
+	<meta name="description" content="Yabble">
+	<meta name="author" content="Yabble">
+	<meta name="keyword" content="Yabble">
+	<!-- end: Meta -->
+	
+	<!-- start: Mobile Specific -->
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<!-- end: Mobile Specific -->
+	
+	<!-- start: CSS -->
+	<link id="bootstrap-style" href="../../../css/bootstrap.min.css" rel="stylesheet">
+	<link href="../../../css/bootstrap-responsive.min.css" rel="stylesheet">
+	<link id="base-style" href="../../../css/style.css" rel="stylesheet">
+	<link id="base-style-responsive" href="../../../css/style-responsive.css" rel="stylesheet">
+	<link href='http://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800&subset=latin,cyrillic-ext,latin-ext' rel='stylesheet' type='text/css'>
+	<link id="bootstrap-style" href="../../../css/notifyBar.css" rel="stylesheet">
+	<!-- end: CSS -->
+	
+
+	<!-- The HTML5 shim, for IE6-8 support of HTML5 elements -->
+	<!--[if lt IE 9]>
+	  	<script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+		<link id="ie-style" href="css/ie.css" rel="stylesheet">
+	<![endif]-->
+	
+	<!--[if IE 9]>
+		<link id="ie9style" href="css/ie9.css" rel="stylesheet">
+	<![endif]-->
+		
+	<!-- start: Favicon -->
+	<link rel="shortcut icon" href="../../../img/favicon.ico">
+	<!-- end: Favicon -->
+	
+</head>
+
+<body>
+		<!-- start: Header -->
+	<% include includes/header.html %>
+	<!-- start: Header -->
+	
+		<div class="container-fluid-full">
+		<div class="row-fluid">
+				
+			<!-- start: Main Menu -->
+			<% include includes/left-menu.html %>
+			<!-- end: Main Menu -->
+			
+			<noscript>
+				<div class="alert alert-block span10">
+					<h4 class="alert-heading">Warning!</h4>
+					<p>You need to have <a href="http://en.wikipedia.org/wiki/JavaScript" target="_blank">JavaScript</a> enabled to use this site.</p>
+				</div>
+			</noscript>
+			
+			<div id="content" class="span10">
+			
+			
+			<ul class="breadcrumb">
+				<li>
+					<i class="icon-home"></i>
+					<a href="dashboard.php">Home</a> 
+					<i class="icon-angle-right"></i>
+				</li>
+				<li>Edit Business Profile</li>
+			</ul>
+
+			
+			<div class="row-fluid sortable">
+				<div class="box span12">
+					<div class="box-header" data-original-title>
+						<h2><i class="halflings-icon white edit"></i><span class="break"></span>Edit Business Profile</h2>
+					</div>
+					<div class="box-content">
+						<form class="form-horizontal" id="businesseditform" action="/api/business/postedit" method="post" enctype="multipart/form-data">
+						  <fieldset>
+							<div class="control-group">
+							  <label class="control-label" for="date01">Business Name</label>
+							  <div class="controls">
+							        <input type="hidden" class="input-xlarge" name="userid" id="userid" value="<%=businessfind._id%>">
+								<input type="text" class="input-xlarge" name="name" id="name" value="<%=businessfind.name%>">
+								<span id="name_err"></span>
+							  </div>
+							</div>
+							
+							<div class="control-group">
+							  <label class="control-label" for="date01">Business Username</label>
+							  <div class="controls">
+								<input type="text" class="input-xlarge" name="username" id="username" value="<%=businessfind.username%>">
+								<span id="username_err"></span>
+							  </div>
+							</div>
+							
+							<div class="control-group">
+							  <label class="control-label" for="date01">Bio</label>
+							  <div class="controls">
+								<textarea class="cleditor" id="bio" name="bio" rows="3"><%-businessfind.bio%></textarea>
+								<span id="bio_err"></span>
+							  </div>
+							</div>
+							<div class="control-group">
+								<label class="control-label">Profile Picture</label>
+								<div class="controls">
+								  <input type="file" name="profile_picture" id="profile_picture">
+								  <span id="profile_picture_err"></span>  
+								   <% if(businessfind.image!=''){%>
+								    <div style="clear:both"></div>
+								    <div><img src="/member_image/<%=businessfind.image%>" style="widht:70px;height:70px"></div>
+								  <% }else{ %>
+								    <div style="clear:both"></div>
+								    <div><img src="/member_image/no_image.png" style="widht:70px;height:70px"></div>
+								  <% } %>
+								</div>
+							  </div>
+							
+							<div class="control-group">
+							  <label class="control-label" for="date01">Facebook</label>
+							  <div class="controls">
+								<input type="text" class="input-xlarge" name="facebook" id="facebook" value="<%=businessfind.facebook%>">
+							  </div>
+							</div>
+							<div class="control-group">
+							  <label class="control-label" for="date01">Twitter</label>
+							  <div class="controls">
+								<input type="text" class="input-xlarge" name="twitter" id="twitter" value="<%=businessfind.twitter%>">
+							  </div>
+							</div>
+							<div class="control-group">
+							  <label class="control-label" for="date01">Instagram</label>
+							  <div class="controls">
+								<input type="text" class="input-xlarge" name="instagram" id="instagram" value="<%=businessfind.instagram%>">
+							  </div>
+							</div>
+							<div class="control-group">
+							  <label class="control-label" for="date01">User Send Yab (/Week)</label>
+							  <div class="controls">
+								<input type="text" class="input-xlarge" name="yabperweek" id="yabperweek" value="<%=businessfind.yabperweek%>" onkeypress="return only_number(event)">
+							  </div>
+							</div>
+							<div class="control-group">
+							  <label class="control-label" for="date01">User Send Yab (/Month)</label>
+							  <div class="controls">
+								<input type="text" class="input-xlarge" name="yabpermonth" id="yabpermonth" value="<%=businessfind.yabpermonth%>" onkeypress="return only_number(event)">
+							  </div>
+							</div>
+							<div class="control-group">
+							  <label class="control-label" for="date01">User Send Yab (/Year)</label>
+							  <div class="controls">
+								<input type="text" class="input-xlarge" name="yabperyear" id="yabperyear" value="<%=businessfind.yabperyear%>" onkeypress="return only_number(event)">
+							  </div>
+							</div>
+							<div class="control-group">
+							  <label class="control-label" for="date01">No of Users Can Associate</label>
+							  <div class="controls">
+								<input type="text" class="input-xlarge" name="userperaccount" id="userperaccount" value="<%=businessfind.userperaccount%>" onkeypress="return only_number(event)">
+							  </div>
+							</div>
+							<div class="control-group">
+								<label class="control-label">Ability To Send Push Notification Flag</label>
+								<div class="controls">
+								  <label class="checkbox inline">
+									<input type="checkbox" id="is_push" name="is_push" value="<% if(businessfind.is_push==1){ %>1<% }else{ %>2<% } %>" <% if(businessfind.is_push==1){ %>checked<% } %>>
+								  </label>
+								  
+								</div>
+						        </div>
+							<div class="control-group">
+								<label class="control-label">Ability To Send Yab To All Users</label>
+								<div class="controls">
+								  <label class="checkbox inline">
+									<input type="checkbox" id="is_send_all" name="is_send_all" value="<% if(businessfind.is_send_all==1){ %>1<% }else{ %>2<% } %>" <% if(businessfind.is_send_all==1){ %>checked<% } %>>
+								  </label>
+								  
+								</div>
+							</div>
+							
+							<div class="control-group">
+								<label class="control-label">Ability To Search Users By Zip Codes</label>
+								<div class="controls">
+								  <label class="checkbox inline">
+									<input type="checkbox" id="is_search_zip" name="is_search_zip" value="<% if(businessfind.is_search_zip==1){ %>1<% }else{ %>2<% } %>" <% if(businessfind.is_search_zip==1){ %>checked<% } %>>
+								  </label>
+								  
+								</div>
+							</div>
+							<div class="control-group">
+								<label class="control-label">Is Active</label>
+								<div class="controls">
+								  <label class="checkbox inline">
+									<input type="checkbox" id="is_active" name="is_active" value="<% if(businessfind.is_active==1){ %>1<% }else{ %>2<% } %>" <% if(businessfind.is_active==1){ %>checked<% } %>>
+								  </label>
+								</div>
+							  </div>
+							
+							<div class="form-actions">
+							  <input type="submit" class="btn btn-primary" name="addbutton" value="Update" onclick="return validate()">
+							  <button type="reset" class="btn">Cancel</button>
+							</div>
+						  </fieldset>
+						</form>   
+					</div>
+				</div><!--/span-->
+			</div><!--/row-->
+	</div><!--/.fluid-container-->
+	
+	<!-- end: Content -->
+	</div><!--/#content.span10-->
+	</div><!--/fluid-row-->
+		
+	<div class="modal hide fade" id="myModal">
+		<div class="modal-header">
+			<button type="button" class="close" data-dismiss="modal">×</button>
+			<h3>Settings</h3>
+		</div>
+		<div class="modal-body">
+			<p>Here settings can be configured...</p>
+		</div>
+		<div class="modal-footer">
+			<a href="#" class="btn" data-dismiss="modal">Close</a>
+			<a href="#" class="btn btn-primary">Save changes</a>
+		</div>
+	</div>
+	
+	<div class="clearfix"></div>
+	
+	<footer>
+		<p>
+			<span style="text-align:left;float:left">&copy; 2014 Yabble</span>			
+		</p>
+	</footer>
+	
+	<!-- start: JavaScript-->
+
+		<script src="../../../js/jquery-1.9.1.min.js"></script>
+		
+	        <script src="../../../js/jquery-migrate-1.0.0.min.js"></script>
+	
+		<script src="../../../js/jquery-ui-1.10.0.custom.min.js"></script>
+	
+		<script src="../../../js/jquery.ui.touch-punch.js"></script>
+	
+		<script src="../../../js/modernizr.js"></script>
+	
+		<script src="../../../js/bootstrap.min.js"></script>
+	
+		<script src="../../../js/jquery.cookie.js"></script>
+	
+		<script src='../../../js/fullcalendar.min.js'></script>
+	
+		<script src='../../../js/jquery.dataTables.min.js'></script>
+
+		<script src="../../../js/excanvas.js"></script>
+		
+	        <script src="../../../js/jquery.flot.js"></script>
+	        
+	        <script src="../../../js/jquery.flot.pie.js"></script>
+	        
+	        <script src="../../../js/jquery.flot.stack.js"></script>
+	        
+	        <script src="../../../js/jquery.flot.resize.min.js"></script>
+	
+		<script src="../../../js/jquery.chosen.min.js"></script>
+	
+		<script src="../../../js/jquery.uniform.min.js"></script>
+		
+		<script src="../../../js/jquery.cleditor.min.js"></script>
+	
+		<script src="../../../js/jquery.noty.js"></script>
+	
+		<script src="../../../js/jquery.elfinder.min.js"></script>
+	
+		<script src="../../../js/jquery.raty.min.js"></script>
+	
+		<script src="../../../js/jquery.iphone.toggle.js"></script>
+	
+		<script src="../../../js/jquery.uploadify-3.1.min.js"></script>
+	
+		<script src="../../../js/jquery.gritter.min.js"></script>
+	
+		<script src="../../../js/jquery.imagesloaded.js"></script>
+	
+		<script src="../../../js/jquery.masonry.min.js"></script>
+	
+		<script src="../../../js/jquery.knob.modified.js"></script>
+	
+		<script src="../../../js/jquery.sparkline.min.js"></script>
+	
+		<script src="../../../js/counter.js"></script>
+	
+		<script src="../../../js/retina.js"></script>
+
+		<script src="../../../js/custom.js"></script>
+		
+		<script src="../../../js/jquery.notifyBar.js"></script>
+		
+		<style>.form-horizontal .controls {padding-top:5px}</style>
+		
+		<script>
+		 $('#is_push').change(function () {
+                    if ($(this).is(':checked')) {
+                        $(this).val('1');
+                    };
+                    if ($(this).is(':checked') == false) {
+                        $(this).val('2');
+                    };
+                });
+                $('#is_send_all').change(function () {
+                    if ($(this).is(':checked')) {
+                        $(this).val('1');
+                    };
+                    if ($(this).is(':checked') == false) {
+                        $(this).val('2');
+                    };
+                });
+                $('#is_search_zip').change(function () {
+                    if ($(this).is(':checked')) {
+                        $(this).val('1');
+                    };
+                    if ($(this).is(':checked') == false) {
+                        $(this).val('2');
+                    };
+                });
+                $('#is_active').change(function () {
+                    if ($(this).is(':checked')) {
+                        $(this).val('1');
+                    };
+                    if ($(this).is(':checked') == false) {
+                        $(this).val('2');
+                    };
+                });
+		 function only_number(e)
+		 {
+		     if(e.which>=48 && e.which<=57)
+		     {
+		       return true;
+		     }
+		     else
+		     {
+		       return false;
+		     }
+		 }
+		 $(document).ready(function(){ 
+                         $("#profile_picture").change(function(){  
+                           var ext =  $('#profile_picture').val().split('.').pop().toLowerCase();
+                             if($.inArray(ext, ['png','jpg','jpeg','gif']) == -1) {
+                                  $('#profile_picture').val('');	
+                                  $('.filename').html('No file selected');
+                                  $('#profile_picture_err').html('<font color="red">Please upload .png, .jpg, .jpeg, .gif file format</font>');
+                             }
+                             else
+                             {
+                               $('#profile_picture_err').html('');
+                             }
+                         });
+                });
+		 function validate()
+		 {
+		    var name=$('#name').val();
+		    var username=$('#username').val();
+	            var bio=$('#bio').val();
+	            
+	            
+	            if(name=='')
+	            {
+	              $('#name_err').html('<font color="red">Please enter a name</font>');
+	            }
+	            else
+	            {
+	              $('#name_err').html('');
+	            }
+	            if(username=='')
+	            {
+	              $('#username_err').html('<font color="red">Please enter a username</font>');
+	            }
+	            else
+	            {
+	              $('#username_err').html('');
+	            }
+	            if(bio=='')
+	            {
+	              $('#bio_err').html('<font color="red">Please enter some description</font>');
+	            }
+	            else
+	            {
+	              $('#bio_err').html('');
+	            }
+	            
+	            if(username!='' && bio!='' && name!='')
+	            {
+                      /*var formData=$("#businesseditform").serialize();
+                          $.ajax({
+                                url : "/api/business/postedit",
+                                type: "POST",
+                                data : formData,
+                                success: function(data)
+                                {
+                                   if(data=='success')
+                                   {
+                                     showSuccess("Business profile updated successfully.");
+                                     setTimeout(function(){window.location.href="/admin/business";}, 2000);
+                                   }
+                                   else if(data=='businessexist')
+                                   {
+                                     showError("Business profile already exist. Please use different username.");
+                                   }
+                                   else
+                                   {
+                                     showError("Business profile can not be updated.");
+                                   }
+                                }
+                       });*/
+                      return true;
+	            }
+	            else
+	            {
+	              return false;
+	            }
+		 }
+		</script>
+	<!-- end: JavaScript-->
+	
+</body>
+</html>
