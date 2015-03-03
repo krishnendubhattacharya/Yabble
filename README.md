@@ -13,33 +13,9 @@ Want to build something from scratch? use the [boilerplate app](https://github.c
 
 * [NodeJs](http://nodejs.org)
 * [mongodb](http://mongodb.org)
-* [imagemagick](http://www.imagemagick.org/script/index.php)
-
-## Install
-
-```sh
-$ git clone git://github.com/madhums/node-express-mongoose-demo.git
-$ npm install
-```
-
-**NOTE:** Do not forget to set the facebook, twitter, google, linkedin and github `CLIENT_ID`s and `SECRET`s. In `development` env, you can simply copy
-`config/env/env.example.json` to `config/env/env.json` and just replace the
-values there. In production, it is not safe to keep the ids and secrets in
+*  In production, it is not safe to keep the ids and secrets in
 a file, so you need to set it up via commandline. If you are using heroku
 checkout how environment variables are set [here](https://devcenter.heroku.com/articles/config-vars).
-
-If you want to use image uploads, don't forget to set env variables for the
-imager config.
-
-```sh
-$ export IMAGER_S3_KEY=AWS_S3_KEY
-$ export IMAGER_S3_SECRET=AWS_S3_SECRET
-$ export IMAGER_S3_BUCKET=AWS_S3_BUCKET
-```
-
-then
-
-```sh
 $ npm start
 ```
 
@@ -47,12 +23,4 @@ $ npm start
 
 Then visit [http://localhost:3000/](http://localhost:3000/)
 
-## Tests
-
-```sh
-$ npm test
-```
-
-## License
-
-MIT
+##
