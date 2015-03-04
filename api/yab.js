@@ -8,7 +8,7 @@ var UserSetting=require('../models/appusersettingmodel');
 var appUser=require('../models/appusers');
 var yabapps=require('../models/yabappmodel')
 var UsrSettings=require('../models/usersettings');
-var appyab=require('../models/appyabcommentmodel');
+var appyabcomment=require('../models/appyabcommentmodel');
 var UserProfile=require('../models/userprofile');
 var member=require('../models/membermodel');
 var business=require('../models/businessmodel');
@@ -41,134 +41,6 @@ function getLastYear(){
     var lastYear = new Date(today.getFullYear(), (today.getMonth()+1), today.getDate() - 365).getTime();
     return lastYear ;
 }
-
-
-/*function time_elapsed_string( var ptime)
-   {
-           var etime = time() - ptime;
-
-            if (etime < 1)
-            {
-                return '0 seconds';
-            }
-
-            var a;
-            a.year=(365 * 24 * 60 * 60 );
-            a.month=(30 * 24 * 60 * 60);
-            a.day=(24 * 60 * 60);
-            a.hour=(60*60);
-            a.minute=(60);
-            a.second=1;
-
-            /*var a = array( 365 * 24 * 60 * 60  =>  'year',
-                         30 * 24 * 60 * 60  =>  'month',
-                              24 * 60 * 60  =>  'day',
-                                   60 * 60  =>  'hour',
-                                        60  =>  'minute',
-                                         1  =>  'second'
-                        );
-        
-            var a_plural ;
-            a_plural.year='years';
-            a_plural.month='months';
-            a_plural.day='days';
-            a_plural.hour='hours';
-            a_plural.minute='minutes';
-            a_plural.second='seconds';
-            /*$a_plural = array( 'year'   => 'years',
-                               'month'  => 'months',
-                               'day'    => 'days',
-                               'hour'   => 'hours',
-                               'minute' => 'minutes',
-                               'second' => 'seconds'
-                        );
-
-            foreach ($a as $secs => $str)
-            {
-                $d = $etime / $secs;
-                if ($d >= 1)
-                {
-                    $r = round($d);
-                    return $r . ' ' . ($r > 1 ? $a_plural[$str] : $str) . ' ago';
-                }
-            }
-     }
-*/
-
-router.get('/myyabs/:authkey/:userid/:device_token_id/',function(req, res, next){
-    var _authkey = req.params.authkey;
-    var _userid=req.params.userid;
-    var _device_token_id = req.params.device_token_id;
-    var totalyabs;
-    
-    if (_authkey != '') {
-        if (_authkey == AUTH_KEY) {
-            if (_device_token_id != '') {
-                 User.findOne({'_id':_userid},function(err,item){
-                        //console.log(item);
-                        //if (item) {
-                            yabapps.find({'user_id':_userid}, {"sort":[['post_date', -1]]},function(err, docs){
-                                totalyabs=docs.length;
-                                //console.log(totalyabs);
-                                if (totalyabs>0) {
-                                    appUser.LastID=_userid;
-                                    appUser.Ack=1;
-                                    appUser.Totalyabs=totalyabs;
-                                    //console.log(_userid);
-
-                                    yabapps.find({'user_id' : _userid},function(err, yab){
-                                        //console.log(yab);
-                                        for(var m in yab)
-                                        {
-                                            console.log(yab[m]._id);
-                                            appyab.find({'yab_id':yab[m]._id},function(err,comments){
-                                                yabcommentcount=comments.length;
-                                                console.log("comments");
-                                                console.log(yabcommentcount);
-                                           
-                                                yablikes.find({'yab_id':yab[m]._id,'yab_status':1},function(err,likes){
-                                                    yablikescount=likes.length;
-                                                    console.log("Likes");
-                                                   console.log(yablikescount);
-
-                                                    UsrSettings.message=yab[m].message;
-                                                    UsrSettings.image=yab[m].image;
-                                                    UsrSettings.post_date=yab[m].post_date;
-                                                    //UsrSettings.post_time_ago=time_elapsed_string(strtotime(yab[m].post_date));
-                                                    UsrSettings.broadcast_radius=yab[m].broadcast_radius;
-                                                    UsrSettings.like=yablikescount;
-                                                    UsrSettings.comment=yabcommentcount;
-                                                    UsrSettings.username=yab[m].username;
-                                                    UsrSettings.img=yab[m].image;
-                                                    UsrSettings.imagewidth = yab[m].imagewidth;
-                                                    UsrSettings.imageheight =yab[m].imageheight;
-                                                    console.log(UsrSettings);
-                                                    appUser.us=UsrSettings;
-                                                    //console.log(appUser);
-
-                                                });
-                                            });
-                                            
-                                        }
-                                        console.log(appUser);
-                                        res.send(appUser);
-                                    });
-                                   }
-                                else
-                                {
-                                    appUser.LastID = _userid;
-                                    appUser.ack = "0";
-                                    appUser.userdetail="";
-                                    appUser.msg = 'You have not posted any yab yet';
-                                    res.send(appUser);
-                                }
-                            });
-                    });
-            }
-        }
-    }
-});
-
 
 router.post('/postyab',function(req,res,next){
     var _authkey = req.body.authkey;
@@ -220,7 +92,7 @@ router.post('/postyab',function(req,res,next){
                         _ip_address="";
                      }
 
-                      var yab=new yabapps({'user_id':_userid,'business_id':_business_id,'message':_message,'location' :_location,'user_ip' :_ip_address, 'latitude':_lat,'longitude':_long, 'min_age': _min_age,'max_age':_max_age,'yab_for':_target_group,'broadcast_radius':_broadcasting_radius,'image':_yabimg,'imagewidth':_imagewidth,'imageheight':_imageheight,'expiration_date':_exp,'post_date':post_date,'yab_from':_yab_from,'yab_send_to':_optionsyabfor,'push_notification':_push_noti});
+                      var yab=new yabapps({'user_id':_userid,'business_id':_business_id,'message':_message,'location' :_location,'user_ip' :_ip_address, 'latitude':_lat,'longitude':_long, 'min_age': _min_age,'max_age':_max_age,'yab_for':_target_group,'broadcast_radius':_broadcasting_radius,'image':_yabimg,'imagewidth':_imagewidth,'imageheight':_imageheight,'expiration_date':_exp,'post_date':post_date,'yab_from':_yab_from,'yab_send_to':_optionsyabfor,'push_notification':_push_noti,'total_comment':0,'total_like':0});
                       yab.save(function(err,data){
                         
                         console.log("data");
@@ -271,6 +143,304 @@ router.post('/postyab',function(req,res,next){
             appUser.msg='Please provide auth key';
             res.send(appUser);
            }
+
+});
+
+function time_elapsed_string(post_date){
+  var date=post_date;
+                              
+  var currentTime=new Date();
+  var sec,hours,minute,day,week,month,year;
+
+  var curr=currentTime.getTime();
+  var sub=(curr-date);
+  if (sub<0) 
+  {
+      timeelapsed=0;
+  }
+  else
+  {
+
+    sec=(sub/1000);
+    
+      if (sec<0) 
+      {
+          timeelapsed=0+" sec ago";
+      }
+      else if (sec>0 && sec<60) 
+      {
+          if (Math.floor(sec)==1) 
+          {
+              timeelapsed= Math.floor(sec)+" sec ago";
+          }
+          else
+          {
+            timeelapsed= Math.floor(sec)+" secs ago";
+          }
+          
+      }
+      else 
+      {
+        minute=sec/60;
+        if (minute>0 &&  minute<60) 
+          {
+              if (Math.floor(minute)==1) 
+              {
+                  timeelapsed= Math.floor(minute)+ " minute ago";
+              }
+              else
+              {
+                  timeelapsed= Math.floor(minute)+ " minutes ago";
+              }
+              
+          }
+          else
+          {
+            hours=minute/60;
+            
+            if(hours>0 && hours<24) 
+            {
+                if (Math.floor(hours)==1) 
+                {
+                    timeelapsed= Math.floor(hours)+ " hour ago";
+                }
+                else
+                {
+                    timeelapsed= Math.floor(hours)+ " hours ago";
+                }
+                
+            }
+
+            else
+            {
+              day=hours/24;
+              
+              if (day>0 && day<30) 
+              {
+                  if (Math.floor(day)==1) 
+                  {
+                      timeelapsed= Math.floor(day)+ " day ago";
+                  }
+                  else
+                  {
+                      timeelapsed= Math.floor(day)+ " days ago";
+                  }
+                  
+              }
+              else
+              {
+                  month=day/30;
+                  
+                  if (month>0 && month<12) 
+                  {
+                      if (Math.floor(month)==1) 
+                      {
+                          timeelapsed= Math.floor(month)+ " Month ago";
+                      }
+                      else
+                      {
+                          timeelapsed= Math.floor(month)+ " Months ago";
+                      }
+                    
+                  }
+                  else
+                  {
+                    year=month/12;
+                    
+                    if (Math.floor(year)==1) 
+                    {
+                        timeelapsed= Math.floor(year)+" year ago";
+                    }
+                    else
+                    {
+                        timeelapsed= Math.floor(year)+" years ago";
+                    }
+                  }
+              }
+
+            }
+
+          }
+      }
+  }
+  return timeelapsed;
+}
+
+
+router.get('/myyabs/:authkey/:userid/:device_token_id',function(req,res,next){
+  var _authkey = req.params.authkey;
+  var _userid=req.params.userid;
+  var _device_token_id = req.params.device_token_id;
+  var yabexist;
+  var yabcount;
+  var yablist=[];
+  var all_yabs_short=[];
+  var all_yabs=[];
+  var data;
+  var businessarr=[];
+  var timeelapsed;
+  if (_authkey != '') {
+        if (_authkey == AUTH_KEY) {
+            if (_device_token_id != '') {
+              User.findOne({'_id':_userid},function(err,item){
+                
+                  if(item)
+                  {
+                    yabapps.find({'user_id':_userid}).sort({post_date: -1}).exec(function(err,yabs){
+                      
+                      
+                        yabexist=1;
+                        yabcount=yabs.length;
+                            if (yabcount>0) 
+                            {
+                              var uid=_userid;
+                              var Ack=1;
+                            appUser.id=uid;
+                            appUser.Ack=Ack;
+                            appUser.totalyabs=yabcount;
+                            for (var y in yabs) {
+                              var date = new Date(yabs[y].post_date);
+                              var post_date = moment(date).format('DD-MM-YYYY, H:mm');
+                              var yabshortdetail,yabdetails,imageexist;
+                              var total_like, total_comment;
+                              var t= date.getTime();
+                              
+                              var timeelapsed=time_elapsed_string(t);
+
+                              if(yabs[y].total_like==undefined)
+                              {
+                                  total_like=0;
+                              }
+                              else
+                              {
+                                  total_like=yabs[y].total_like;
+                              }
+
+                              if (yabs[y].total_comment==undefined) 
+                              {
+                                  total_comment=0;
+                              }
+                              else
+                              {
+                                  total_comment=yabs[y].total_comment;
+                              }
+
+                              yabdetails=({"id":yabs[y]._id,"post_date": post_date,'post_time_ago':timeelapsed,"message": yabs[y].message,'username':item.username,"image":yabs[y].image,"img":item.image,'imagewidth':yabs[y].imagewidth,'imageheight':yabs[y].imageheight,'broadcast_radius':yabs[y].broadcast_radius,'total_like':total_like,'total_comment':total_comment})
+                              console.log(yabdetails);
+                              all_yabs.push(yabdetails);
+                            }
+                              appUser.yablist=all_yabs;
+                              var msg='Your posted yabs listing';
+                              appUser.msg=msg;
+                              res.send(appUser);
+                            }
+                            else
+                            {
+                                appUser.id = $userid;
+                                appUser.Ack = 1;
+                                appUser.msg = 'You have not posted any yab yet';
+                                res.send(appUser);
+                            }
+                      });
+                  }
+                      else
+                      {
+                        member.findOne({'_id':_userid},function(err,item){
+                            business.find({'_id':item.business_id},function(err,busi){
+                              yabapps.find({'user_id':_userid}).sort({post_date: -1}).exec(function(err,yabs){
+                                if (yabs) 
+                                {
+                                    yabcount=yabs.length;
+                                    if (yabcount>0) 
+                                      {
+                                        appUser.id=_userid;
+                                        appUser.Ack=1;
+                                        appUser.totalyabs=yabcount;
+                                        for (var y in yabs) {
+                                          var date = new Date(yabs[y].post_date);
+                                          var post_date = moment(date).format('DD-MM-YYYY, H:mm');
+                                          var yabshortdetail,yabdetails,imageexist;
+                                          var t= date.getTime();
+                              
+                              
+                                          var timeelapsed=time_elapsed_string(t);
+                                          if(yabs[y].total_like==undefined)
+                                          {
+                                              total_like=0;
+                                          }
+                                          else
+                                          {
+                                              total_like=yabs[y].total_like;
+                                          }
+
+                                          if (yabs[y].total_comment==undefined) 
+                                          {
+                                              total_comment=0;
+                                          }
+                                          else
+                                          {
+                                              total_comment=yabs[y].total_comment;
+                                          }
+                                          yabdetails=({"id":yabs[y]._id,"post_date": post_date,'post_time_ago':timeelapsed,"message": yabs[y].message,'username':item.username,"image":yabs[y].image,"img":item.image,'imagewidth':yabs[y].imagewidth,'imageheight':yabs[y].imageheight,'broadcast_radius':yabs[y].broadcast_radius,'total_like':total_like,'total_comment':total_comment})
+                                          all_yabs.push(yabdetails);
+                                        }
+                                          appUser.yabslist=all_yabs;
+                                          appUser.msg='Your posted yabs listing';
+                                          res.send(appUser);
+                                      }
+
+                                      else
+                                      {
+                                          appUser.id = $userid;
+                                          appUser.Ack = 1;
+                                          appUser.msg = 'You have not posted any yab yet';
+                                          res.send(appUser);
+                                      }
+
+                                }
+
+                                else
+                                  {
+                                      appUser.id = '';
+                                      appUser.Ack = 0;
+                                      appUser.msg = 'Invalid user';
+                                      res.send(appUser);
+                                  }
+
+                            });
+                        });
+                      });
+                      
+                    }
+
+                  
+                  });
+                }
+                else
+                {
+                    appUser.id = '';
+                    appUser.Ack = 0;
+                    appUser.msg = 'Please provide device token';
+                    res.send(appUser);
+                }
+            
+          }
+          else
+          {
+            appUser.id = '';
+            appUser.Ack = 0;
+            appUser.msg = 'Invalid auth key';
+            res.send(appUser);
+          }
+        }
+        else
+        {
+          appUser.id = '';
+          appUser.Ack = 0;
+          appUser.msg = 'Please provide auth key';
+          res.send(appUser);
+        }
+
 
 });
 
@@ -453,6 +623,29 @@ router.post('/webpostyab',function(req,res,next){
             }
           });
      });
+});
+
+router.get('/deletemyyab/:id', function(req, res, next) {
+  var id = req.params.id;
+  yabapps.findOne({"_id":id},function(err,yabfind){
+        if (err) {
+           res.send('error');
+        }
+        else if(yabfind=='' || yabfind==null)
+        {
+           res.send('error');
+        }
+        else 
+        {
+          yabapps.remove({ '_id': id },function(err,yabremove){
+          });
+          appyabcomment.remove({ 'yab_id': id },function(err,commentremove){
+          });
+          yablikes.remove({ 'yab_id': id },function(err,likeremove){
+          });
+          res.send('success');
+        }
+   });
 });
 
 module.exports = router;
