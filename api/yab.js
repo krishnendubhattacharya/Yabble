@@ -42,6 +42,295 @@ function getLastYear(){
     return lastYear ;
 }
 
+
+function getDistanceFromLatLonInKm(lat1,lon1,lat2,lon2) {
+  var R = 6371; // Radius of the earth in km
+  var dLat = deg2rad(lat2-lat1);  // deg2rad below
+  var dLon = deg2rad(lon2-lon1); 
+  var a = 
+    Math.sin(dLat/2) * Math.sin(dLat/2) +
+    Math.cos(deg2rad(lat1)) * Math.cos(deg2rad(lat2)) * 
+    Math.sin(dLon/2) * Math.sin(dLon/2)
+    ; 
+  var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a)); 
+  var d = R * c; // Distance in km
+  return d;
+}
+
+function deg2rad(deg) {
+  return deg * (Math.PI/180)
+}
+
+
+
+router.get('/myphotos/:authkey/:userid/:device_token_id',function(req,res,next){
+  var _authkey=req.params.authkey;
+  var _userid=req.params.userid;
+  var _device_token_id=req.params.device_token_id;
+  var yabs_image=[];
+  var image;
+ 
+   if (_authkey != '') {
+        if (_authkey == AUTH_KEY) {
+            if (_device_token_id != '') {
+              User.findOne({'_id':_userid},function(err,item){
+                  if(item)
+                  {
+                    console.log("item");
+                      image = item.image;
+                      yabapps.find({'user_id':_userid}).sort({post_date: -1}).exec(function(err,yabs){
+
+                          yabcount=yabs.length;
+                            if (yabcount>0) 
+                            {
+                                appUser.id=_userid;
+                                appUser.Ack=1;
+                                appUser.totalyabs=yabcount;
+                                for (var y in yabs) 
+                                {
+                                    if(item.image=!'')
+                                    {
+                                      
+                                        UsrSettings.img=image;
+                                        UsrSettings.imagewidth=yabs[y].imagewidth;
+                                        UsrSettings.imageheight=yabs[y].imageheight;
+                                        yabs_image.push(UsrSettings);
+                                       
+                                    }
+                                }
+                                appUser.yabList=yabs_image;
+                                appUser.msg='Your posted yab photos listing';
+                                res.send(appUser);
+                            }
+                            else
+                            {
+                                appUser.id=_userid;
+                                appUser.Ack=1;
+                                appUser.msg='You have not posted any yab yet';
+                                res.send(appUser);
+                            }
+                      });
+                  }
+                  else
+                  {
+                      member.findOne({'_id':_userid},function(err,item){
+                        if(item)
+                        {
+                            image = item.image;
+                            business.find({'_id':item.business_id},function(err,busi){
+                              yabapps.find({'user_id':_userid}).sort({post_date: -1}).exec(function(err,yabs){
+                                yabcount=yabs.length;
+                                if (yabcount>0) 
+                                {
+                                    appUser.id=_userid;
+                                    appUser.Ack=1;
+                                    appUser.totalyabs=yabcount;
+                                    for(var y in yabs)
+                                    {
+                                        if(yabs.image=!'')
+                                      {
+                                          UsrSettings.img=image;
+                                          UsrSettings.imagewidth=yabs[y].imagewidth;
+                                          UsrSettings.imageheight=yabs[y].imageheight;
+                                          yabs_image.push(UsrSettings);
+                                      }
+                                    }
+                                    appUser.yabList=yabs_image;
+                                    appUser.msg='Your posted yab photos listing';
+                                    res.send(appUser);
+                                }
+                                else
+                                {
+                                    appUser.id=_userid;
+                                    appUser.Ack=1;
+                                    appUser.msg='You have not posted any yab yet';
+                                    res.send(appUser);
+                                }
+
+                            });
+                          
+                          });
+                        }
+                        else
+                        {
+                            appUser.id='';
+                            appUser.Ack=0;
+                            appUser.msg='Invalid user';
+                            res.send(appUser);
+                        }
+                       
+
+                      });
+
+                  }
+
+            });
+          }
+          else
+          {
+              appUser.id='';
+              appUser.Ack=0;
+              appUser.msg='Please provide device token';
+              res.send(appUser);
+          }
+        }
+        else
+        {
+            appUser.id='';
+            appUser.Ack=0;
+            appUser.msg='Invalid auth key';
+            res.send(appUser);
+        }
+
+    }
+    else
+    {
+        appUser.id='';
+        appUser.Ack=0;
+        appUser.msg='Please provide auth key';
+        res.send(appUser);
+    }
+});
+
+
+router.get('/yabDetails/:authkey/:yabid/:device_token_id',function(req,res,next){
+  var _authkey = req.params.authkey;
+  var _yabid = req.params.yabid;
+  var _device_token_id=req.params.device_token_id;
+  var yabComment=[];
+  if (_authkey != '') {
+        if (_authkey == AUTH_KEY) {
+            if (_device_token_id != '') {
+
+                yabapps.findOne({'_id':_yabid},function(err,item){
+                  if(item)
+                  {
+                      if (item.yab_from =='A') 
+                        {
+                            User.findOne({'_id':item.user_id},function(err,usr){
+
+                              appUser.UserID = item.user_id;
+                              appUser.YabID = item._id;
+                              appUser.Ack = 1;
+                              appUser.name=usr.name;
+                              appUser.username=usr.username;
+                              appUser.img=usr.image;
+                              appUser.broadcast_radius=usr.broadcast_radius;
+                              appUser.like=item.total_like;
+                              appUser.post_date=item.post_date;
+                              appUser.message=item.message;
+                              appUser.image=item.image;
+                              appUser.imagewidth=item.imagewidth;
+                              appUser.imageheight=item.imageheight;
+                              if(item.total_comment>0)
+                              {
+                                appyabcomment.find({'yab_id':item._id}).sort({post_date: -1}).exec(function(err,cmnt){
+                                  console.log(cmnt);
+                                    for(var c in cmnt)
+                                    {
+                                        User.findOne({'_id':cmt.user_id},function(err,usr){
+                                          if (usr) 
+                                            {
+                                                yabComment.push({'comment_user_image':usr.image,'comment_user_name':usr.name,'comment_user_username':usr.username,'comment_post_date':cmnt[c].post_date,'comment_text':cmnt[c].comment});
+
+                                            }
+                                            else
+                                            {
+                                              member.findOne({'_id':_userid},function(err,mem){
+                                                  business.find({'_id':mem.business_id},function(err,busi){
+                                                      yabComment.push({'comment_user_image':busi.image,'comment_user_name':busi.name,'comment_user_username':busi.username,'comment_post_date':cmnt[c].post_date,'comment_text':cmnt[c].comment});
+                                                  });
+                                              });
+                                            }
+                                        });
+                                    }
+                                    appUser.comments=yabComment;
+                                });
+                              }
+                              else
+                              {
+                                  appUser.comments=[];
+                              }
+                              res.send(appUser);
+                            });
+
+                        }
+                        else if(item.yab_from =='W')
+                        {
+                          member.findOne({'_id':_userid},function(err,item){
+                              business.find({'_id':item.business_id},function(err,busi){
+
+                                  appUser.UserID = item.user_id;
+                                  appUser.YabID = item._id;
+                                  appUser.Ack = 1;
+                                  appUser.name=busi.name;
+                                  appUser.username=busi.username;
+                                  appUser.img=busi.image;
+                                  appUser.broadcast_radius=busi.broadcast_radius;
+                                  appUser.like=like_countl;
+                                  appUser.post_date=item.post_date;
+                                  appUser.message=item.message;
+                                  appUser.image=item.image;
+                                  appUser.imagewidth=item.imagewidth;
+                                  appUser.imageheight=item.imageheight;
+                                  if(item.total_comment>0)
+                                  {
+                                    appyabcomment.find({'yab_id':item._id}).sort({post_date: -1}).exec(function(err,cmnt){
+                                      console.log(cmnt);
+                                      for(var c in cmnt)
+                                      {
+
+                                          yabComment.push({'comment_user_image':usr.image,'comment_user_name':usr.name,'comment_user_username':usr.username,'comment_post_date':cmnt[c].post_date,'comment_text':cmnt[c].comment});
+                                      }
+                                  });
+
+                              });
+                          });
+                        }
+                  }
+
+                  else
+                  {
+                      appUser.LastID='';
+                      appUser.Ack=0;
+                      appUser.comments='';
+                      appUser.msg='Invalid yab';
+                      res.send(appUser);
+                  }
+            });
+
+           }
+           else
+           {
+                appUser.LastID='';
+                appUser.Ack=0;
+                appUser.comments='';
+                appUser.msg='Please provide device token';
+                res.send(appUser);
+           }       
+        }
+        else
+       {
+            appUser.LastID='';
+            appUser.Ack=0;
+            appUser.comments='';
+            appUser.msg='Invalid auth key';
+            res.send(appUser);
+       }   
+
+    }
+    else
+   {
+      appUser.LastID='';
+      appUser.Ack=0;
+      appUser.comments='';
+      appUser.msg='Please provide auth key';
+      res.send(appUser);
+   }   
+
+});
+
+
 router.post('/postyab',function(req,res,next){
     var _authkey = req.body.authkey;
     var _userid=req.body.userid;
